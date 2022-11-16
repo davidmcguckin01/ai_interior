@@ -1,0 +1,3 @@
+[console_scripts]
+reqs=reqs.reqs:main
+
