@@ -22,7 +22,7 @@ configure()
 db = TinyDB("data.json")
 
 """
-# Welcome to AI Architect
+# Welcome to AI Interior
 
 #
 Input your prompt and we will generate a design for you.
