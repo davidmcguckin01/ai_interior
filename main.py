@@ -67,24 +67,31 @@ with tab2:
     #### How to write great prompts
     - Be As Specific as You Can 
     - Name Specific Art Styles or Mediums -> “acrylic painting”
-    - Name Specific Artists ie. “by (Artist Name)” 
+    - Name Specific architecture ie. “by (Artist Name)” 
     - Weight Your Keywords ie. “cute, grey cat” -> “[cute],((grey cat)).”
     - Tweak Other Important Settings such as CFG, Sampling Method and Sampling Steps
 
-    #### Cool words to use in your prompt
+    #### Prompts to use in your prompt
     - 50mm
     - 35mm
     - cinematic lighting
-    - award winning photo,
-    - ultrarealistic
-    - unreal engine
-    - rendered in vray
+    - Award winning photo,
+    - Ultrarealistic
+    - Unreal engine
+    - Rendered in vray
 
-    #### Words to influence your architectural design
-    - 
+    #### Words to influence your interior design
+    - Wooden floor 
+    - Biege blue
+    - Salmon pastel
+    - Minimalist white
+    - Sun light 
+    - Volumetric light
+
+
     """
 
 with tab3:
     """
-    ## _Coming soon_
+    "High resoltion photography of a minimalistic white interior living room with a wooden floor, beige blue salmon pastel, sun light, contrast, realistic artstation concept art, hyperdetail, ultradetail, cinematic 8k, architecural rendering, unreal engine 5, rtx, volumetric light, cozy atmosphere"
     """
