@@ -29,7 +29,7 @@ Input your prompt and we will generate a design for you.
 _Process may take up to 30 seconds_
 """
 
-instruction = "Realistic architectural rendering of " + st.text_input("Enter your prompt") + ", highly detailed realistic modern Home with a view, Photorealistic, rendered in unreal engine, ultradetail"
+instruction = "Realistic interior design rendering of " + st.text_input("Enter your prompt") + ", highly detailed realistic modern home interior, Photorealistic, rendered in unreal engine, ultradetail"
 
 if st.button('Generate'):
     model = replicate.models.get("stability-ai/stable-diffusion")
