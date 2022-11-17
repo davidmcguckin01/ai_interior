@@ -4,6 +4,7 @@ import streamlit as st
 from tinydb import TinyDB
 from dotenv import load_dotenv
 import json
+import pydantic
 
 hide_menu_style = """
         <style>
@@ -12,13 +13,7 @@ hide_menu_style = """
         """
 
 st.markdown(hide_menu_style, unsafe_allow_html=True)
-
-
-def configure():
-    load_dotenv()
-
-configure()
-
+                                                                               
 db = TinyDB("data.json")
 
 """
@@ -29,11 +24,13 @@ Input your prompt and we will generate a design for you.
 _Process may take up to 30 seconds_
 """
 
-instruction = "Realistic interior design rendering of " + st.text_input("Enter your prompt") + ", highly detailed realistic modern home interior, Photorealistic, rendered in unreal engine, ultradetail"
+instruction = "Highly contrasting, photorealistic interior design rendering of " + st.text_input("Enter your prompt") + ", highly detailed realistic modern home interior, rendered in unreal engine, ultradetail"
+img = 'https://www.taylorwimpey.co.uk/-/twdxmedia/images/national/customer-service/tregwilym-view-shelford-kitchen.png?la=en&h=769&w=1152&mw=1152&hash=489B3ABF5946D4A352EEE341193DAB17'
 
 if st.button('Generate'):
     model = replicate.models.get("stability-ai/stable-diffusion")
-    image = model.predict(prompt=instruction)
+    image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = img, num_outputs = 1, width = 128, height = 128)
+    
     st.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
     if instruction:
         db.insert({
@@ -93,5 +90,5 @@ with tab2:
 
 with tab3:
     """
-    "High resoltion photography of a minimalistic white interior living room with a wooden floor, beige blue salmon pastel, sun light, contrast, realistic artstation concept art, hyperdetail, ultradetail, cinematic 8k, architecural rendering, unreal engine 5, rtx, volumetric light, cozy atmosphere"
+    "High resolution photography of a minimalistic white interior living room with a wooden floor, beige blue salmon pastel, sun light, contrast, realistic artstation concept art, hyperdetail, ultradetail, cinematic 8k, architecural rendering, unreal engine 5, rtx, volumetric light, cozy atmosphere"
     """
