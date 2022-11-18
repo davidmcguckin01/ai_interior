@@ -4,7 +4,6 @@ import streamlit as st
 from tinydb import TinyDB
 from dotenv import load_dotenv
 import json
-import pydantic
 
 hide_menu_style = """
         <style>
