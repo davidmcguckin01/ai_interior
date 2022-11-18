@@ -4,7 +4,16 @@ import streamlit as st
 from tinydb import TinyDB
 from dotenv import load_dotenv
 import json
+import boto3
+import datetime
+import random
 
+
+# Config 
+s3 = boto3.client("s3") # s3 client
+db = TinyDB("data.json") # database for gallery
+
+# Hide streamlit default menu
 hide_menu_style = """
         <style>
         #MainMenu {visibility: hidden;}
@@ -12,9 +21,8 @@ hide_menu_style = """
         """
 
 st.markdown(hide_menu_style, unsafe_allow_html=True)
-                                                                               
-db = TinyDB("data.json")
 
+# Welcome message
 """
 # Welcome to AI Interior
 
@@ -23,22 +31,35 @@ Input your prompt and we will generate a design for you.
 _Process may take up to 30 seconds_
 """
 
+# Prompt input
 instruction = "Highly contrasting, photorealistic interior design rendering of " + st.text_input("Enter your prompt") + ", highly detailed realistic modern home interior, rendered in unreal engine, ultradetail"
-img = 'https://www.taylorwimpey.co.uk/-/twdxmedia/images/national/customer-service/tregwilym-view-shelford-kitchen.png?la=en&h=769&w=1152&mw=1152&hash=489B3ABF5946D4A352EEE341193DAB17'
 
-# img = st.file_uploader("Choose a file")
+# Image upload
+img_upload = st.file_uploader(label = "Choose a file", accept_multiple_files=False, key=None, help=None, on_change=None, args=None, kwargs=None, disabled=False, label_visibility="visible")
+img_upload_file_name = str(datetime.datetime.now()) + str(random.randint(0,100))
+if img_upload:
+    s3.upload_fileobj(img_upload, "interioraiimagestorage", str(img_upload_file_name))
 
+#for bucket in s3.buckets.all():
+#.bash_profile    print(bucket.Object URL)
+
+# Generate button
 if st.button('Generate'):
+    # Model config
     model = replicate.models.get("stability-ai/stable-diffusion")
-    image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = img, num_outputs = 1, width = 128, height = 128)
+    image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = "https://interioraiimagestorage.s3.us-east-2.amazonaws.com/OBJECT_NAME", num_outputs = 1, width = 128, height = 128)
     
-    st.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+    # Sending result image to json db
     if instruction:
         db.insert({
             "instruction" : instruction, 
             "image" : image
         })
 
+    # Output image
+    st.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+
+# Additional content section
 st.markdown('#')
 st.markdown('#')
 st.markdown('#') 
