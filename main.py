@@ -25,9 +25,9 @@ _Process may take up to 30 seconds_
 """
 
 instruction = "Highly contrasting, photorealistic interior design rendering of " + st.text_input("Enter your prompt") + ", highly detailed realistic modern home interior, rendered in unreal engine, ultradetail"
-# img = 'https://www.taylorwimpey.co.uk/-/twdxmedia/images/national/customer-service/tregwilym-view-shelford-kitchen.png?la=en&h=769&w=1152&mw=1152&hash=489B3ABF5946D4A352EEE341193DAB17'
+img = 'https://www.taylorwimpey.co.uk/-/twdxmedia/images/national/customer-service/tregwilym-view-shelford-kitchen.png?la=en&h=769&w=1152&mw=1152&hash=489B3ABF5946D4A352EEE341193DAB17'
 
-img = st.file_uploader("Choose a file")
+# img = st.file_uploader("Choose a file")
 
 if st.button('Generate'):
     model = replicate.models.get("stability-ai/stable-diffusion")
