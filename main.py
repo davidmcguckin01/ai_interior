@@ -8,7 +8,6 @@ import boto3
 import datetime
 import random
 
-
 # Config 
 s3 = boto3.client("s3") # s3 client
 db = TinyDB("data.json") # database for gallery
@@ -39,6 +38,9 @@ img_upload = st.file_uploader(label = "Choose a file", accept_multiple_files=Fal
 img_upload_file_name = str(datetime.datetime.now()) + str(random.randint(0,100))
 if img_upload:
     s3.upload_fileobj(img_upload, "interioraiimagestorage", str(img_upload_file_name))
+
+#img_download = s3.download_file('interioraiimagestorage', img_upload_file_name, img_upload_file_name + "download")
+#st.text(img_download)
 
 #for bucket in s3.buckets.all():
 #.bash_profile    print(bucket.Object URL)
