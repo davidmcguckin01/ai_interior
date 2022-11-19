@@ -13,6 +13,9 @@ import base64
 from PIL import Image
 from compress_img import compress_img
 import io
+import torch
+
+torch.cuda.empty_cache()
 
 load_dotenv()
 
@@ -87,7 +90,7 @@ if st.button('Generate'):
         })
 
     # Output image
-    st.image(image, caption=None, width=200, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+    st.image(image, caption=None, width=700, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 
 # Additional content section
 st.markdown('#')
