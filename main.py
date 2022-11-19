@@ -8,16 +8,16 @@ import boto3
 from botocore.client import Config
 import datetime
 import random
-import requests
 from create_presigned_url import create_presigned_url
-import pathlib
 import base64
+from PIL import Image
+from compress_img import compress_img
+
 
 load_dotenv()
 
 # Config 
 s3 = boto3.client("s3") # s3 client
-
 db = TinyDB("data.json") # database for gallery
 
 # Hide streamlit default menu
@@ -43,16 +43,19 @@ instruction = "Highly contrasting, photorealistic interior design rendering of "
 
 # Image upload
 img_upload = st.file_uploader(label = "Choose a file", accept_multiple_files=False, key=None, help=None, on_change=None, args=None, kwargs=None, disabled=False, label_visibility="visible")
-img_upload_file_name = str(datetime.datetime.now()) + str(random.randint(0,100))
+
+file_name = str(datetime.datetime.now()) + str(random.randint(0,100))
+file_name = file_name.replace(' ', '')
+file_name = file_name.replace('-', '')
+file_name = file_name.replace(':', '')
+file_name = file_name.replace('.', '')
+
 if img_upload:
-    s3.upload_fileobj(img_upload, "interioraiimagestorage", str(img_upload_file_name))
+    #img_upload = compress_img(img_upload)
+    s3.upload_fileobj(img_upload, "interioraiimagestorage", str(file_name))
 
     # Image download
-    s3.download_file('interioraiimagestorage', '1', 'images/download.png')
-
-    #in_file = open("images/download.png", "rb") # opening for [r]eading as [b]inary
-    #data = in_file.read() # if you only wanted to read 512 bytes, do .read(512)
-    
+    s3.download_file('interioraiimagestorage', file_name, 'images/'+file_name+'.png')
     encoded = base64.b64encode(open("images/download.png", "rb").read())
 
     def image_to_data_url(filename):
@@ -62,7 +65,7 @@ if img_upload:
             img = f.read()
         return prefix + base64.b64encode(img).decode('utf-8')
 
-    data = image_to_data_url("images/download.png")
+    data = image_to_data_url('images/'+file_name+'.png')
 
 # Generate button
 if st.button('Generate'):
