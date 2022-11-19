@@ -10,6 +10,8 @@ import random
 import requests
 from create_presigned_url import create_presigned_url
 
+load_dotenv()
+
 # Config 
 s3 = boto3.client("s3") # s3 client
 db = TinyDB("data.json") # database for gallery
@@ -50,7 +52,13 @@ if url is not None:
 if st.button('Generate'):
     # Model config
     model = replicate.models.get("stability-ai/stable-diffusion")
-    image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = "https://interioraiimagestorage.s3.us-east-2.amazonaws.com/OBJECT_NAME", num_outputs = 1, width = 128, height = 128)
+    
+    st.write(response) # we need to take the url instead of the <Response [400]>
+
+    if img_upload:
+        image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = response)
+    else:
+        image = model.predict(prompt=instruction)
     
     # Sending result image to json db
     if instruction:
