@@ -87,7 +87,7 @@ if st.button('Generate'):
         })
 
     # Output image
-    st.image(image, caption=None, width=128, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+    st.image(image, caption=None, width=200, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 
 # Additional content section
 st.markdown('#')
