@@ -75,9 +75,9 @@ if st.button('Generate'):
     model = replicate.models.get("stability-ai/stable-diffusion")
 
     if img_upload:
-        image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = data)
+        image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = data, num_outputs = 2)
     else:
-        image = model.predict(prompt=instruction)
+        image = model.predict(prompt=instruction, num_outputs = 2)
     
     # Sending result image to json db
     if instruction:
