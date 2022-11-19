@@ -12,7 +12,8 @@ from create_presigned_url import create_presigned_url
 import base64
 from PIL import Image
 from compress_img import compress_img
-
+import io
+import zlib
 
 load_dotenv()
 
@@ -51,8 +52,9 @@ file_name = file_name.replace(':', '')
 file_name = file_name.replace('.', '')
 
 if img_upload:
-    #img_upload = compress_img(img_upload)
-    s3.upload_fileobj(img_upload, "interioraiimagestorage", str(file_name))
+    # Image upload
+    bytes_data = img_upload.getvalue()
+    s3.upload_fileobj(io.BytesIO(bytes_data), "interioraiimagestorage", str(file_name))
 
     # Image download
     s3.download_file('interioraiimagestorage', file_name, 'images/'+file_name+'.png')
@@ -73,9 +75,9 @@ if st.button('Generate'):
     model = replicate.models.get("stability-ai/stable-diffusion")
 
     if img_upload:
-        image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = data)
+        image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = data, num_inference_steps = 15)
     else:
-        image = model.predict(prompt=instruction)
+        image = model.predict(prompt=instruction, num_inference_steps = 15)
     
     # Sending result image to json db
     if instruction:
