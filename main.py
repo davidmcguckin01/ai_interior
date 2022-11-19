@@ -13,7 +13,9 @@ import base64
 from PIL import Image
 from compress_img import compress_img
 import io
-import zlib
+import torch
+
+torch.cuda.empty_cache()
 
 load_dotenv()
 
@@ -43,7 +45,8 @@ _Process may take up to 30 seconds_
 instruction = "Highly contrasting, photorealistic interior design rendering of " + st.text_input("Enter your prompt") + ", highly detailed realistic modern home interior, rendered in unreal engine, ultradetail"
 
 # Image upload
-img_upload = st.file_uploader(label = "Choose a file", accept_multiple_files=False, key=None, help=None, on_change=None, args=None, kwargs=None, disabled=False, label_visibility="visible")
+img_upload = st.file_uploader(label = "Choose a file (Maximum size is 1024x768 or 768x1024 pixels)", accept_multiple_files=False, key=None, help=None, on_change=None, args=None, kwargs=None, disabled=False, label_visibility="visible")
+
 
 file_name = str(datetime.datetime.now()) + str(random.randint(0,100))
 file_name = file_name.replace(' ', '')
