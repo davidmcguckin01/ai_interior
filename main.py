@@ -75,9 +75,9 @@ if st.button('Generate'):
     model = replicate.models.get("stability-ai/stable-diffusion")
 
     if img_upload:
-        image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = data, num_outputs = 2)
+        image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = data, num_outputs = 4)
     else:
-        image = model.predict(prompt=instruction, num_outputs = 2)
+        image = model.predict(prompt=instruction, num_outputs = 4)
     
     # Sending result image to json db
     if instruction:
@@ -87,7 +87,7 @@ if st.button('Generate'):
         })
 
     # Output image
-    st.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+    st.image(image, caption=None, width=128, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 
 # Additional content section
 st.markdown('#')
