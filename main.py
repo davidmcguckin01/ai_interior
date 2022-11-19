@@ -7,6 +7,8 @@ import json
 import boto3
 import datetime
 import random
+import requests
+from create_presigned_url import create_presigned_url
 
 # Config 
 s3 = boto3.client("s3") # s3 client
@@ -39,11 +41,10 @@ img_upload_file_name = str(datetime.datetime.now()) + str(random.randint(0,100))
 if img_upload:
     s3.upload_fileobj(img_upload, "interioraiimagestorage", str(img_upload_file_name))
 
-#img_download = s3.download_file('interioraiimagestorage', img_upload_file_name, img_upload_file_name + "download")
-#st.text(img_download)
-
-#for bucket in s3.buckets.all():
-#.bash_profile    print(bucket.Object URL)
+# Presigned url
+url = create_presigned_url("interioraiimagestorage", '1')
+if url is not None:
+    response = requests.get(url)
 
 # Generate button
 if st.button('Generate'):
