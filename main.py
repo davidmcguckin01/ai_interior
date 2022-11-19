@@ -5,15 +5,19 @@ from tinydb import TinyDB
 from dotenv import load_dotenv
 import json
 import boto3
+from botocore.client import Config
 import datetime
 import random
 import requests
 from create_presigned_url import create_presigned_url
+import pathlib
+import base64
 
 load_dotenv()
 
 # Config 
 s3 = boto3.client("s3") # s3 client
+
 db = TinyDB("data.json") # database for gallery
 
 # Hide streamlit default menu
@@ -43,20 +47,30 @@ img_upload_file_name = str(datetime.datetime.now()) + str(random.randint(0,100))
 if img_upload:
     s3.upload_fileobj(img_upload, "interioraiimagestorage", str(img_upload_file_name))
 
-# Presigned url
-url = create_presigned_url("interioraiimagestorage", '1')
-if url is not None:
-    response = requests.get(url)
+    # Image download
+    s3.download_file('interioraiimagestorage', '1', 'images/download.png')
+
+    #in_file = open("images/download.png", "rb") # opening for [r]eading as [b]inary
+    #data = in_file.read() # if you only wanted to read 512 bytes, do .read(512)
+    
+    encoded = base64.b64encode(open("images/download.png", "rb").read())
+
+    def image_to_data_url(filename):
+        ext = filename.split('.')[-1]
+        prefix = f'data:image/{ext};base64,'
+        with open(filename, 'rb') as f:
+            img = f.read()
+        return prefix + base64.b64encode(img).decode('utf-8')
+
+    data = image_to_data_url("images/download.png")
 
 # Generate button
 if st.button('Generate'):
     # Model config
     model = replicate.models.get("stability-ai/stable-diffusion")
-    
-    st.write(response) # we need to take the url instead of the <Response [400]>
 
     if img_upload:
-        image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = response)
+        image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = data)
     else:
         image = model.predict(prompt=instruction)
     
