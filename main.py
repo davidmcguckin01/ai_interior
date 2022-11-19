@@ -13,9 +13,6 @@ import base64
 from PIL import Image
 from compress_img import compress_img
 import io
-import torch
-
-torch.cuda.empty_cache()
 
 load_dotenv()
 
