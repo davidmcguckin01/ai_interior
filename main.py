@@ -13,9 +13,6 @@ import base64
 from PIL import Image
 from compress_img import compress_img
 import io
-import torch
-
-torch.cuda.empty_cache()
 
 load_dotenv()
 
@@ -42,7 +39,7 @@ _Process may take up to 30 seconds_
 """
 
 # Prompt input
-instruction = "Highly contrasting, photorealistic interior design rendering of " + st.text_input("Enter your prompt") + ", highly detailed realistic modern home interior, rendered in unreal engine, ultradetail"
+instruction = "Highly contrasting, fine detailed, photorealistic interior design rendering of " + st.text_input("Enter your prompt") + ", rendered in unreal engine, ultradetail, 50mm, cinematic lighting, Award winning photo, Ultrarealistic, Unreal engine, Rendered in vray"
 
 # Image upload
 img_upload = st.file_uploader(label = "Choose a file (Maximum size is 1024x768 or 768x1024 pixels)", accept_multiple_files=False, key=None, help=None, on_change=None, args=None, kwargs=None, disabled=False, label_visibility="visible")
@@ -78,7 +75,8 @@ if st.button('Generate'):
     model = replicate.models.get("stability-ai/stable-diffusion")
 
     if img_upload:
-        image = model.predict(prompt=instruction, prompt_strength = 0.7, init_image = data, num_outputs = 2)
+        image = model.predict(prompt=instruction, width = 512, prompt_strength = 0.7, init_image = data, num_outputs = 2, num_inference_steps = 40, guidance_scale = 10, )
+        #image = model.predict(prompt=instruction, width = 768, init_image = data, prompt_strength = 0.7, num_outputs = 1, num_inference_steps = 30, guidance_scale = 7.5)
     else:
         image = model.predict(prompt=instruction, num_outputs = 2)
     
